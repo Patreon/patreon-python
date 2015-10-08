@@ -14,5 +14,4 @@ class API(object):
   def __get_json(self, suffix):
     response = requests.get("https://api.patreon.com/oauth2/api/{}".format(suffix),
       headers={'Authorization': "Bearer {}".format(self.access_token)})
-    print('user response',response, response.status_code, response.text)
     return response.json()

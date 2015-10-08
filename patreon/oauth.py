@@ -25,5 +25,4 @@ class OAuth(object):
 
   def __update_token(self, params):
     response = requests.post("https://api.patreon.com/oauth2/token", params=params)
-    print('tokens response',response, response.status_code, response.text)
     return response.json()
