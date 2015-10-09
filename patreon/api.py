@@ -9,7 +9,7 @@ class API(object):
     return self.__get_json('current_user')
 
   def fetch_campaign_and_patrons(self):
-    return self.__get_json('current_user/campaign')
+    return self.__get_json('current_user/campaign?include=rewards,creator,goals,pledges')
 
   def __get_json(self, suffix):
     response = requests.get("https://api.patreon.com/oauth2/api/{}".format(suffix),
