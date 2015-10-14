@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='patreon',
-      version='0.0.4',
+      version='0.0.5',
       description='Python library for interacting with the Patreon API. OAuth-centric for now.',
       url='http://github.com/Patreon/patreon-python',
       author='Patreon',
