@@ -1,5 +1,7 @@
-import requests
+import urllib
 from datetime import timezone
+
+import requests
 
 
 class API(object):
