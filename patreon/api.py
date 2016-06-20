@@ -1,5 +1,5 @@
 import requests
-from datetime import timezone
+from patreon.version_compatibility.utc_timezone import utc_timezone
 
 class API(object):
   def __init__(self, access_token):
@@ -34,7 +34,7 @@ class API(object):
   def __as_utc(dt):
     if hasattr(dt, 'tzinfo'):
       if dt.tzinfo:
-        return dt.astimezone(timezone.utc)
+        return dt.astimezone(utc_timezone())
       else:
-        return dt.replace(tzinfo=timezone.utc)
+        return dt.replace(tzinfo=utc_timezone())
     return dt
