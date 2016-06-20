@@ -1,7 +1,19 @@
 # patreon-python
 Interact with the Patreon API via OAuth.
 
-Get the egg from [PyPI](https://pypi.python.org/pypi/patreon)
+Get the egg from [PyPI](https://pypi.python.org/pypi/patreon), typically via `pip`:
+
+```
+pip install patreon
+```
+or
+```
+echo "patreon" >> requirements.txt
+pip install -r requirements.txt
+```
+
+Make sure that, however you install `patreon`,
+you install its [dependencies](https://github.com/Patreon/patreon-python/blob/master/setup.py#L12) as well
 
 
 Step 1. Get your client_id and client_secret
@@ -27,7 +39,7 @@ creator_id = None     # Replace with your data
 @app.route('/oauth/redirect')
 def oauth_redirect():
     oauth_client = patreon.OAuth(client_id, client_secret)
-    tokens = oauth_client.get_tokens(request.args.get('code'), redirect_uri)
+    tokens = oauth_client.get_tokens(request.args.get('code'), '/oauth/redirect')
     access_token = tokens['access_token']
 
     api_client = patreon.API(access_token)
@@ -35,13 +47,13 @@ def oauth_redirect():
     user = user_response['data']
     included = user_response.get('included')
     if included:
-      pledge = next((obj for obj in included
-        if obj['type'] == 'pledge' and obj['relationships']['creator']['data']['id'] == creator_id), None)
-      campaign = next((obj for obj in included
-        if obj['type'] == 'campaign' and obj['relationships']['creator']['data']['id'] == creator_id), None)
+        pledge = next((obj for obj in included
+            if obj['type'] == 'pledge' and obj['relationships']['creator']['data']['id'] == creator_id), None)
+        campaign = next((obj for obj in included
+            if obj['type'] == 'campaign' and obj['relationships']['creator']['data']['id'] == creator_id), None)
     else:
-      pledge = nil
-      campaign = nil
+        pledge = None
+        campaign = None
 
     # pass user, pledge, and campaign to your view to render as needed
 ```
@@ -65,6 +77,6 @@ which is not included by default, you could do:
 ```python
 api_client = patreon.API(patron_access_token)
 patron_response = api_client.fetch_user(None, {
-  'pledge': patreon.schemas.pledge.default_attributes + [patreon.schemas.pledge.Attributes.total_historical_amount_cents]
+    'pledge': patreon.schemas.pledge.default_attributes + [patreon.schemas.pledge.Attributes.total_historical_amount_cents]
 })
 ```
