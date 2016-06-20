@@ -26,7 +26,6 @@ default_attributes = [
     Attributes.patron_count,
 ]
 
-
 default_relationships = [
     Relationships.creator
 ]

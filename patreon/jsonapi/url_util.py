@@ -11,7 +11,8 @@ def build_url(path, includes=None, fields=None):
         params.update({'include': joined_or_null(includes)})
     if fields:
         params.update({
-            "fields[{resource_type}]".format(resource_type=resource_type): joined_or_null(attributes)
+            "fields[{resource_type}]"
+            .format(resource_type=resource_type): joined_or_null(attributes)
             for resource_type, attributes in fields.items()
         })
     return "{path}{connector}{encoded_params}".format(
