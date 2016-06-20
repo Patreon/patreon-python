@@ -1,4 +1,8 @@
 # patreon-python
+[![Version](https://img.shields.io/pypi/v/patreon.svg?style=flat)](http://pypi.python.org/pypi/patreon)
+[![License](https://img.shields.io/pypi/l/patreon.svg?style=flat)](http://pypi.python.org/pypi/patreon)
+[![Python Version](https://img.shields.io/pypi/pyversions/patreon.svg?style=flat)](http://pypi.python.org/pypi/patreon)
+
 Interact with the Patreon API via OAuth.
 
 Get the egg from [PyPI](https://pypi.python.org/pypi/patreon), typically via `pip`:
