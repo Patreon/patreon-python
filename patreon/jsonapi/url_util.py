@@ -1,4 +1,4 @@
-from patreon.urlencode import urlencode
+from patreon.version_compatibility.urlencode import urlencode
 
 
 def build_url(path, includes=None, fields=None):
@@ -19,6 +19,3 @@ def build_url(path, includes=None, fields=None):
         connector=connector,
         encoded_params=urlencode(params)
     )
-
-
-build_url('/campaigns', ['pledges'], {'campaign': ['summary', 'created_at'], 'pledge': []})
