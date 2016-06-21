@@ -1,4 +1,4 @@
-from patreon.version_compatibility.urlencode import urlencode
+from patreon.version_compatibility.urllib_parse import urlencode
 
 
 def build_url(path, includes=None, fields=None):

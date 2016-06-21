@@ -3,7 +3,7 @@ import requests
 from patreon.jsonapi.url_util import build_url
 from patreon.schemas import campaign
 from patreon.version_compatibility.utc_timezone import utc_timezone
-from patreon.version_compatibility.urlencode import urlencode
+from patreon.version_compatibility.urllib_parse import urlencode, urlparse, parse_qs
 
 
 class API(object):
@@ -47,6 +47,37 @@ class API(object):
             includes=includes,
             fields=fields
         ))
+
+    @staticmethod
+    def extract_cursor(jsonapi_document, cursor_path='links.next'):
+        def head_and_tail(path):
+            if path is None:
+                return None, None
+            head_tail = path.split('.', 1)
+            return head_tail if len(head_tail) == 2 else (head_tail[0], None)
+
+        head, tail = head_and_tail(cursor_path)
+        current_dict = jsonapi_document
+        while head and type(current_dict) == dict and head in current_dict:
+            current_dict = current_dict[head]
+            head, tail = head_and_tail(tail)
+
+        # Path was valid until leaf, at which point nothing was found
+        if current_dict is None or (head is not None and tail is None):
+            return None
+        # Path stopped before leaf was reached
+        elif current_dict and type(current_dict) != str:
+            raise Exception('Provided cursor path did not result in a link', current_dict)
+
+        link = current_dict
+        query_string = urlparse(link).query
+        parsed_query_string = parse_qs(query_string)
+        if 'page[cursor]' in parsed_query_string:
+            return parsed_query_string['page[cursor]'][0]
+        else:
+            return None
+
+    # Internal methods
 
     def __get_json(self, suffix):
         response = requests.get(
