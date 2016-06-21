@@ -65,7 +65,7 @@ def oauth_redirect():
 
 Step 3. (Optional) Customize your usage
 ---
-`patreon.API` instances have four methods:
+`patreon.API` instances have four methods for interacting with the API:
 * `fetch_user(includes=None, fields=None)`
 * `fetch_campaign(includes=None, fields=None)`
 * `fetch_campaign_and_patrons(includes=None, fields=None)`
@@ -83,4 +83,14 @@ api_client = patreon.API(patron_access_token)
 patron_response = api_client.fetch_user(None, {
     'pledge': patreon.schemas.pledge.default_attributes + [patreon.schemas.pledge.Attributes.total_historical_amount_cents]
 })
+```
+
+`patreon.API` also has a utility method `extract_cursor`
+which you can use to extract [pagination links](http://jsonapi.org/format/#fetching-pagination)
+from our [json:api response documents](http://jsonapi.org):
+```python
+api_client = patreon.API(patron_access_token)
+patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10)
+next_cursor = api_client.extract_cursor(patrons_page)
+second_patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=next_cursor)
 ```
