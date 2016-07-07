@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='patreon',
       version='0.3.0',
@@ -7,7 +7,7 @@ setup(name='patreon',
       author='Patreon',
       author_email='david@patreon.com',
       license='Apache 2.0',
-      packages=['patreon'],
+      packages=find_packages(),
       install_requires=[
           'requests',
       ],
