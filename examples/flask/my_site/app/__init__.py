@@ -35,6 +35,10 @@ def create_app() -> Flask:
 
     # Configure routing & controllers
     # import and register all controllers here
+    from .controllers import (
+        auth_controller
+    )
+    my_app.register_blueprint(auth_controller.auth_blueprint)
 
     # Configure error handling
     for error in list(range(400, 420)) + list(range(500, 506)):
