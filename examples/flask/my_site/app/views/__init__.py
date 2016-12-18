@@ -1,0 +1,1 @@
+# import all views here for easy partial rendering
