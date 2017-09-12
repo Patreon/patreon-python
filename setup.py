@@ -14,7 +14,6 @@ setup(
     ),
     install_requires=[
         'requests',
-        'six',
     ],
     test_requires=[
         'pytest',

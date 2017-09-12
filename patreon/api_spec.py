@@ -1,10 +1,11 @@
+import datetime
 import functools
 import mock
-import requests
 
 from patreon import api
-
-from six.moves.urllib import parse
+from patreon.jsonapi import url_util
+from patreon.version_compatibility import urllib_parse
+from patreon.version_compatibility.utc_timezone import utc_timezone
 
 MOCK_CAMPAIGN_ID = 12
 API_ROOT_ENDPOINT = 'https://api.patreon.com/oauth2/api/'
@@ -15,13 +16,17 @@ DEFAULT_API_HEADERS = {'Authorization': 'Bearer ' + MOCK_ACCESS_TOKEN}
 client = api.API(access_token=MOCK_ACCESS_TOKEN)
 
 
-def api_url(*segments, **query):
+def api_url(*segments, fields=None, includes=None, **query):
     path = '/'.join(map(str, segments))
 
     if query:
-        path += '?' + parse.urlencode(query)
+        path += '?' + urllib_parse.urlencode(query)
 
-    return API_ROOT_ENDPOINT + path
+    return url_util.build_url(
+        API_ROOT_ENDPOINT + path,
+        fields=fields,
+        includes=includes,
+    )
 
 
 def assert_valid_api_call(method, api_url, query=None, **kwargs):
@@ -63,7 +68,7 @@ def api_test(method='GET', **response_kwargs):
 
 @api_test()
 def test_can_fetch_campaign():
-    expected_url = api_url('current_user', 'campaigns?')
+    expected_url = api_url('current_user', 'campaigns')
     response = client.fetch_campaign()
     return expected_url, response
 
@@ -91,6 +96,75 @@ def test_can_fetch_api_and_patrons_with_custom_includes():
 
     response = client.fetch_campaign_and_patrons(
         includes=['creator'],
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_can_fetch_page_of_pledges():
+    PAGE_COUNT = 25
+
+    response = client.fetch_page_of_pledges(MOCK_CAMPAIGN_ID, PAGE_COUNT)
+
+    query_params = {'page[count]': PAGE_COUNT}
+
+    expected_url = api_url(
+        'campaigns', MOCK_CAMPAIGN_ID, 'pledges', **query_params
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_can_fetch_page_of_pledges_with_arbitrary_cursor():
+    PAGE_COUNT = 25
+    MOCK_CURSOR = 'Mock Cursor'
+
+    response = client.fetch_page_of_pledges(
+        MOCK_CAMPAIGN_ID,
+        PAGE_COUNT,
+        cursor=MOCK_CURSOR,
+    )
+
+    query_params = {
+        'page[count]': PAGE_COUNT,
+        'page[cursor]': MOCK_CURSOR,
+    }
+
+    expected_url = api_url(
+        'campaigns', MOCK_CAMPAIGN_ID, 'pledges', **query_params
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_can_fetch_page_of_pledges_with_custom_options():
+    PAGE_COUNT = 25
+    MOCK_CURSOR = datetime.datetime.now()
+    MOCK_FIELDS = {'field': ['value']}
+    MOCK_INCLUDES = ['mock includes']
+
+    EXPECTED_CURSOR = MOCK_CURSOR.replace(tzinfo=utc_timezone()).isoformat()
+
+    response = client.fetch_page_of_pledges(
+        MOCK_CAMPAIGN_ID,
+        PAGE_COUNT,
+        cursor=MOCK_CURSOR,
+        includes=MOCK_INCLUDES,
+        fields=MOCK_FIELDS,
+    )
+
+    query_params = {
+        'page[count]': PAGE_COUNT,
+        'page[cursor]': EXPECTED_CURSOR,
+        'include': ','.join(MOCK_INCLUDES),
+        'fields': MOCK_FIELDS,
+    }
+
+    expected_url = api_url(
+        'campaigns', MOCK_CAMPAIGN_ID, 'pledges', **query_params
     )
 
     return expected_url, response
