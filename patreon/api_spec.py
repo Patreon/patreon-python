@@ -16,8 +16,17 @@ DEFAULT_API_HEADERS = {'Authorization': 'Bearer ' + MOCK_ACCESS_TOKEN}
 client = api.API(access_token=MOCK_ACCESS_TOKEN)
 
 
-def api_url(*segments, fields=None, includes=None, **query):
+def api_url(*segments, **query):
     path = '/'.join(map(str, segments))
+
+    fields = query.get('fields', None)
+    includes = query.get('includes', None)
+
+    if fields:
+        del query['fields']
+
+    if includes:
+        del query['includes']
 
     if query:
         path += '?' + urllib_parse.urlencode(query)
@@ -80,7 +89,7 @@ def test_can_fetch_api_and_patrons():
     expected_url = api_url(
         'current_user',
         'campaigns',
-        include=','.join(['rewards', 'creator', 'goals', 'pledges']),
+        includes=['rewards', 'creator', 'goals', 'pledges'],
     )
 
     return expected_url, response
@@ -91,7 +100,7 @@ def test_can_fetch_api_and_patrons_with_custom_includes():
     expected_url = api_url(
         'current_user',
         'campaigns',
-        include='creator',
+        includes=['creator'],
     )
 
     response = client.fetch_campaign_and_patrons(
@@ -159,7 +168,7 @@ def test_can_fetch_page_of_pledges_with_custom_options():
     query_params = {
         'page[count]': PAGE_COUNT,
         'page[cursor]': EXPECTED_CURSOR,
-        'include': ','.join(MOCK_INCLUDES),
+        'includes': MOCK_INCLUDES,
         'fields': MOCK_FIELDS,
     }
 
