@@ -1,5 +1,7 @@
 from patreon.version_compatibility.urllib_parse import urlencode
 
+from six.moves.urllib import parse
+
 
 def build_url(path, includes=None, fields=None):
     def joined_or_null(arr):
@@ -7,16 +9,20 @@ def build_url(path, includes=None, fields=None):
 
     connector = '&' if '?' in path else '?'
     params = {}
+
     if includes:
         params.update({'include': joined_or_null(includes)})
+
     if fields:
-        params.update({
-            "fields[{resource_type}]"
-            .format(resource_type=resource_type): joined_or_null(attributes)
-            for resource_type, attributes in fields.items()
-        })
-    return "{path}{connector}{encoded_params}".format(
-        path=path,
-        connector=connector,
-        encoded_params=urlencode(params)
-    )
+        params.update(
+            {
+                "fields[{resource_type}]".format(resource_type=resource_type):
+                joined_or_null(attributes)
+                for resource_type, attributes in fields.items()
+            }
+        )
+
+    if not params:
+        return path
+
+    return path + connector + urlencode(params)
