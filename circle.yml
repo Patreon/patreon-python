@@ -1,0 +1,15 @@
+machine:
+  timezone: America/Los_Angeles
+
+
+dependencies:
+  override:
+    - pip install coveralls
+    - pip install -e .
+
+
+test:
+  override:
+    - py.test --cov=patreon -rssX -q patreon
+    - coveralls
+
