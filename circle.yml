@@ -5,7 +5,8 @@ machine:
 dependencies:
   override:
     - pip install coveralls
-    - pip install -e .
+    - python setup.py develop
+    - pip install pytest pytest-cov mock
 
 
 test:
