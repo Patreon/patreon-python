@@ -1,12 +1,11 @@
 from patreon.version_compatibility.urllib_parse import urlencode
 
-from six.moves.urllib import parse
+
+def joined_or_null(arr):
+    return "null" if len(arr) == 0 else ','.join(arr)
 
 
 def build_url(path, includes=None, fields=None):
-    def joined_or_null(arr):
-        return "null" if len(arr) == 0 else ','.join(arr)
-
     connector = '&' if '?' in path else '?'
     params = {}
 
