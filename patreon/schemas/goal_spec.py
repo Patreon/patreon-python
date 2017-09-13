@@ -26,9 +26,7 @@ def test_schema_attributes_are_properly_formatted(attributes):
 
 
 def test_schema_relationships_are_properly_formatted(relationships):
-    for relationship_name in relationships:
-        value = getattr(goal.Relationships, relationship_name, None)
-        assert value is not None and value is relationship_name
+    assert len(relationships) is 0
 
 
 def test_schema_has_expected_default_attributes():
@@ -40,4 +38,4 @@ def test_schema_has_expected_default_attributes():
 
 
 def test_schema_has_expected_default_relationships():
-    assert goal.default_relationships == []
+    assert len(goal.default_relationships) is 0
