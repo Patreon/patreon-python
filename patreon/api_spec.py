@@ -203,13 +203,44 @@ def test_can_fetch_page_of_pledges_with_arbitrary_cursor():
 
 
 @api_test()
-def test_can_fetch_page_of_pledges_with_custom_options():
+def test_can_fetch_page_of_pledges_with_custom_options_without_tzinfo():
     PAGE_COUNT = 25
     MOCK_CURSOR = datetime.datetime.now()
     MOCK_FIELDS = {'field': ['value']}
     MOCK_INCLUDES = ['mock includes']
 
     EXPECTED_CURSOR = MOCK_CURSOR.replace(tzinfo=utc_timezone()).isoformat()
+
+    response = client.fetch_page_of_pledges(
+        MOCK_CAMPAIGN_ID,
+        PAGE_COUNT,
+        cursor=MOCK_CURSOR,
+        includes=MOCK_INCLUDES,
+        fields=MOCK_FIELDS,
+    )
+
+    query_params = {
+        'page[count]': PAGE_COUNT,
+        'page[cursor]': EXPECTED_CURSOR,
+        'includes': MOCK_INCLUDES,
+        'fields': MOCK_FIELDS,
+    }
+
+    expected_url = api_url(
+        'campaigns', MOCK_CAMPAIGN_ID, 'pledges', **query_params
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_can_fetch_page_of_pledges_with_custom_options_with_tzinfo():
+    PAGE_COUNT = 25
+    MOCK_CURSOR = datetime.datetime.now().replace(tzinfo=utc_timezone())
+    MOCK_FIELDS = {'field': ['value']}
+    MOCK_INCLUDES = ['mock includes']
+
+    EXPECTED_CURSOR = MOCK_CURSOR.isoformat()
 
     response = client.fetch_page_of_pledges(
         MOCK_CAMPAIGN_ID,
