@@ -100,6 +100,11 @@ def test_extract_cursor_returns_None_when_no_cursor_provided():
 
 
 @api_test()
+def test_can_fetch_user():
+    return api_url('current_user'), client.fetch_user()
+
+
+@api_test()
 def test_can_fetch_campaign():
     expected_url = api_url('current_user', 'campaigns')
     response = client.fetch_campaign()
