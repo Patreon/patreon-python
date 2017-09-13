@@ -1,9 +1,14 @@
 from setuptools import setup, find_packages
 
+DESCRIPTION = (
+    'Python library for interacting with the Patreon API. '
+    'OAuth-centric for now.'
+)
+
 setup(
     name='patreon',
     version='0.3.1',
-    description='Python library for interacting with the Patreon API. OAuth-centric for now.',
+    description=DESCRIPTION,
     url='http://github.com/Patreon/patreon-python',
     author='Patreon',
     author_email='david@patreon.com',
@@ -11,6 +16,9 @@ setup(
     packages=find_packages(
         exclude=['examples', 'examples.*', 'test', 'test.*']
     ),
+    setup_requires=[
+        'pytest-runner',
+    ],
     install_requires=[
         'requests',
     ],

@@ -1,16 +1,9 @@
-machine:
-  timezone: America/Los_Angeles
-
-
 dependencies:
   override:
     - pip install coveralls
-    - python setup.py develop
-    - pip install pytest pytest-cov mock
 
 
 test:
   override:
-    - py.test --cov=patreon -rssX -q patreon
+    - python setup.py test
     - coveralls
-
