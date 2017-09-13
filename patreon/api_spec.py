@@ -17,10 +17,6 @@ DEFAULT_API_HEADERS = {'Authorization': 'Bearer ' + MOCK_ACCESS_TOKEN}
 client = api.API(access_token=MOCK_ACCESS_TOKEN)
 
 
-def noop():
-    pass
-
-
 def api_url(*segments, **query):
     path = '/'.join(map(str, segments))
 
@@ -112,16 +108,20 @@ def test_extract_cursor_returns_None_when_link_is_not_a_string():
 
 
 def test_extract_cursor_returns_None_when_link_is_malformed():
+    caught_exception = False
+
     try:
         api.API.extract_cursor({
             'links': {
-                'next': noop,
+                'next': 12,
             },
         })
+
     except Exception as e:
+        caught_exception = True
         assert e.args[0] == 'Provided cursor path did not result in a link'
-    else:
-        assert False
+
+    assert caught_exception
 
 
 @api_test()
