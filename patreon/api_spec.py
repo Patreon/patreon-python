@@ -10,6 +10,7 @@ from patreon.version_compatibility.utc_timezone import utc_timezone
 MOCK_CAMPAIGN_ID = 12
 API_ROOT_ENDPOINT = 'https://api.patreon.com/oauth2/api/'
 MOCK_ACCESS_TOKEN = 'mock token'
+MOCK_CURSOR_VALUE = 'Mock Cursor Value'
 
 DEFAULT_API_HEADERS = {'Authorization': 'Bearer ' + MOCK_ACCESS_TOKEN}
 
@@ -73,6 +74,29 @@ def api_test(method='GET', **response_kwargs):
         return execute_test
 
     return api_test_factory
+
+
+def test_extract_cursor_returns_cursor_when_provided():
+    assert MOCK_CURSOR_VALUE == api.API.extract_cursor(
+        {
+            'links':
+                {
+                    'next':
+                        'https://patreon.com/members?page[cursor]=' +
+                        MOCK_CURSOR_VALUE,
+                },
+        }
+    )
+
+
+def test_extract_cursor_returns_None_when_no_cursor_provided():
+    assert None is api.API.extract_cursor(
+        {
+            'links': {
+                'next': 'https://patreon.com/members?page[offset]=25',
+            },
+        }
+    )
 
 
 @api_test()
