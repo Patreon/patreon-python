@@ -4,7 +4,12 @@
 # Setuptools distribution folder.
 /dist/
 
+# Testing artifacts
+/.cache*
+/.coverage*
+
 # Python egg metadata, regenerated from source files by setuptools.
 /*.egg-info
+/.eggs/*
 
 .idea/

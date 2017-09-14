@@ -12,11 +12,9 @@ class API(object):
         self.access_token = access_token
 
     def fetch_user(self, includes=None, fields=None):
-        return self.__get_json(build_url(
-            'current_user',
-            includes=includes,
-            fields=fields
-        ))
+        return self.__get_json(
+            build_url('current_user', includes=includes, fields=fields)
+        )
 
     def fetch_campaign_and_patrons(self, includes=None, fields=None):
         if not includes:
@@ -25,14 +23,16 @@ class API(object):
         return self.fetch_campaign(includes=includes, fields=fields)
 
     def fetch_campaign(self, includes=None, fields=None):
-        return self.__get_json(build_url(
-            'current_user/campaigns',
-            includes=includes,
-            fields=fields
-        ))
+        return self.__get_json(
+            build_url(
+                'current_user/campaigns', includes=includes, fields=fields
+            )
+        )
 
-    def fetch_page_of_pledges(self, campaign_id, page_size,
-                              cursor=None, includes=None, fields=None):
+    def fetch_page_of_pledges(
+            self, campaign_id, page_size, cursor=None, includes=None,
+            fields=None
+    ):
         url = 'campaigns/{0}/pledges'.format(campaign_id)
         params = {'page[count]': page_size}
         if cursor:
@@ -42,11 +42,9 @@ class API(object):
                 pass
             params.update({'page[cursor]': cursor})
         url += "?" + urlencode(params)
-        return self.__get_json(build_url(
-            url,
-            includes=includes,
-            fields=fields
-        ))
+        return self.__get_json(
+            build_url(url, includes=includes, fields=fields)
+        )
 
     @staticmethod
     def extract_cursor(jsonapi_document, cursor_path='links.next'):
@@ -67,7 +65,9 @@ class API(object):
             return None
         # Path stopped before leaf was reached
         elif current_dict and type(current_dict) != str:
-            raise Exception('Provided cursor path did not result in a link', current_dict)
+            raise Exception(
+                'Provided cursor path did not result in a link', current_dict
+            )
 
         link = current_dict
         query_string = urlparse(link).query
