@@ -27,7 +27,10 @@ setup(
         exclude=['examples', 'examples.*', 'test', 'test.*']
     ),
     setup_requires=setup_requires,
-    install_requires=['requests'],
+    install_requires=[
+        'requests',
+        'cartographer',
+    ],
     tests_require=[
         'pytest',
         'pytest-cov',

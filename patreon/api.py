@@ -1,4 +1,5 @@
 import requests
+from cartographer.parsers.jsonapi_parser import PostedDocument
 
 from patreon.jsonapi.url_util import build_url
 from patreon.schemas import campaign
@@ -12,7 +13,7 @@ class API(object):
         self.access_token = access_token
 
     def fetch_user(self, includes=None, fields=None):
-        return self.__get_json(
+        return self.__get_jsonapi_doc(
             build_url('current_user', includes=includes, fields=fields)
         )
 
@@ -23,7 +24,7 @@ class API(object):
         return self.fetch_campaign(includes=includes, fields=fields)
 
     def fetch_campaign(self, includes=None, fields=None):
-        return self.__get_json(
+        return self.__get_jsonapi_doc(
             build_url(
                 'current_user/campaigns', includes=includes, fields=fields
             )
@@ -42,7 +43,7 @@ class API(object):
                 pass
             params.update({'page[cursor]': cursor})
         url += "?" + urlencode(params)
-        return self.__get_json(
+        return self.__get_jsonapi_doc(
             build_url(url, includes=includes, fields=fields)
         )
 
@@ -53,6 +54,9 @@ class API(object):
                 return None, None
             head_tail = path.split('.', 1)
             return head_tail if len(head_tail) == 2 else (head_tail[0], None)
+
+        if isinstance(jsonapi_document, PostedDocument):
+            jsonapi_document = jsonapi_document.json_data
 
         head, tail = head_and_tail(cursor_path)
         current_dict = jsonapi_document
@@ -78,6 +82,11 @@ class API(object):
             return None
 
     # Internal methods
+    def __get_jsonapi_doc(self, suffix):
+        response_json = self.__get_json(suffix)
+        if response_json.get('errors'):
+            return response_json
+        return PostedDocument(response_json)
 
     def __get_json(self, suffix):
         response = requests.get(
