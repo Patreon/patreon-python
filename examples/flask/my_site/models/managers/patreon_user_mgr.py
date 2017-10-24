@@ -20,8 +20,8 @@ def update_user_for_tokens(patreon_refresh_token, patreon_access_token):
         patreon_access_token=patreon_access_token
     )
 
-    pledges = user.related_resource('pledges')
-    if pledges:
+    pledges = user.relationship('pledges')
+    if pledges and len(pledges) > 0:
         pledge = pledges[0]
         db_user.update({
             'patreon_pledge_amount_cents': pledge.attribute('amount_cents')
@@ -32,7 +32,7 @@ def update_user_for_tokens(patreon_refresh_token, patreon_access_token):
 
 
 def get_or_create_user_for_patreon_user_id(patreon_user_data, patreon_refresh_token, patreon_access_token):
-    user_id = patreon_user_data.json_data['id']
+    user_id = patreon_user_data.id()
     info = {
         'full_name': patreon_user_data.attribute('full_name'),
         'email': patreon_user_data.attribute('email'),

@@ -4,6 +4,7 @@ import mock
 
 from patreon import api
 from patreon.jsonapi import url_util
+from patreon.jsonapi.parser import JSONAPIParser
 from patreon.version_compatibility import urllib_parse
 from patreon.version_compatibility.utc_timezone import utc_timezone
 
@@ -69,7 +70,8 @@ def api_test(method='GET', **response_kwargs):
 
             method_func.assert_called_once()
             assert_valid_api_call(method_func, expected_url)
-            assert response is method_func.return_value.data
+            assert isinstance(response, JSONAPIParser)
+            assert response.json_data is method_func.return_value.data
 
         return execute_test
 

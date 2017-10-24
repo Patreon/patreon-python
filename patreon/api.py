@@ -1,6 +1,6 @@
 import requests
-from cartographer.parsers.jsonapi_parser import PostedDocument
 
+from patreon.jsonapi.parser import JSONAPIParser
 from patreon.jsonapi.url_util import build_url
 from patreon.schemas import campaign
 from patreon.version_compatibility.utc_timezone import utc_timezone
@@ -55,7 +55,7 @@ class API(object):
             head_tail = path.split('.', 1)
             return head_tail if len(head_tail) == 2 else (head_tail[0], None)
 
-        if isinstance(jsonapi_document, PostedDocument):
+        if isinstance(jsonapi_document, JSONAPIParser):
             jsonapi_document = jsonapi_document.json_data
 
         head, tail = head_and_tail(cursor_path)
@@ -86,7 +86,7 @@ class API(object):
         response_json = self.__get_json(suffix)
         if response_json.get('errors'):
             return response_json
-        return PostedDocument(response_json)
+        return JSONAPIParser(response_json)
 
     def __get_json(self, suffix):
         response = requests.get(
