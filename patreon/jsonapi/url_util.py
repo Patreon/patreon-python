@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from patreon.version_compatibility.urllib_parse import urlencode
 
 
@@ -24,4 +26,5 @@ def build_url(path, includes=None, fields=None):
     if not params:
         return path
 
-    return path + connector + urlencode(params)
+    sorted_params = OrderedDict(sorted(params.items(), key=lambda t: t[0]))
+    return path + connector + urlencode(sorted_params)
