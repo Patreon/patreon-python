@@ -97,3 +97,16 @@ patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10)
 next_cursor = api_client.extract_cursor(patrons_page)
 second_patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=next_cursor)
 ```
+
+
+Developing
+---
+1. Clone this repo
+2. `virtualenv venv`
+3. `source venv/bin/activate`
+4. `pip install -e .`
+5. `git checkout -b my-branch-name`
+6. make your edits, writing tests for any new functionality
+7. make sure tests pass with `???`
+8. `git push`
+9. Open a pull request, explaining your changes (both problem and solution) clearly
