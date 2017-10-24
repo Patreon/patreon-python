@@ -105,8 +105,9 @@ Developing
 2. `virtualenv venv`
 3. `source venv/bin/activate`
 4. `pip install -e .`
+4. `pip install -r dev-requirements.txt`
 5. `git checkout -b my-branch-name`
 6. make your edits, writing tests for any new functionality
-7. make sure tests pass with `???`
+7. make sure tests pass with `python setup.py test`
 8. `git push`
 9. Open a pull request, explaining your changes (both problem and solution) clearly
