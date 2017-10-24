@@ -51,19 +51,21 @@ def oauth_redirect():
 
     api_client = patreon.API(access_token)
     user_response = api_client.fetch_user()
-    user = user_response['data']
-    included = user_response.get('included')
-    if included:
-        pledge = next((obj for obj in included
-            if obj['type'] == 'pledge' and obj['relationships']['creator']['data']['id'] == creator_id), None)
-        campaign = next((obj for obj in included
-            if obj['type'] == 'campaign' and obj['relationships']['creator']['data']['id'] == creator_id), None)
-    else:
-        pledge = None
-        campaign = None
+    user = user_response.data()
+    pledges = user.relationship('pledges')
+    pledge = pledges[0] if pledges and len(pledges) > 0 else None
 
-    # pass user, pledge, and campaign to your view to render as needed
+    # pass user and pledge to your view to render as needed
 ```
+
+You'll notice that the `user_response` does not return raw JSON data.
+Instead, it returns a [JSON:API resource object](https://github.com/Patreon/patreon-python/blob/master/patreon/jsonapi/parser.py#L4),
+to simplify traversing the normalized graph data that the Patreon API returns.
+Some available methods are:
+* `response.data()` to get the main resource
+* `response.data().attribute('full_name')` to get the `full_name` attribute from the response data
+* `response.data().relationship('campaign').attribute('pledge_sum')` to get the `pledge_sum` attribute from the `campaign` resource related to the main response data
+* `response.find_resource_by_type_and_id('user', '123')` to find an arbitrary resource
 
 
 Step 3. (Optional) Customize your usage
@@ -92,10 +94,20 @@ patron_response = api_client.fetch_user(None, {
 which you can use to extract [pagination links](http://jsonapi.org/format/#fetching-pagination)
 from our [json:api response documents](http://jsonapi.org):
 ```python
-api_client = patreon.API(patron_access_token)
-patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10)
-next_cursor = api_client.extract_cursor(patrons_page)
-second_patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=next_cursor)
+api_client = patreon.API(creator_access_token)
+campaign_id = api_client.fetch_campaign().data()[0].id()
+pledges = []
+cursor = None
+while True:
+    pledges_response = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=cursor)
+    pledges += pledges_response.data()
+    cursor = api_client.extract_cursor(pledges_response)
+    if not cursor:
+        break
+names_and_pledges = [{
+    'full_name': pledge.relationship('patron').attribute('full_name'),
+    'amount_cents': pledge.attribute('amount_cents'),
+} for pledge in pledges]
 ```
 
 

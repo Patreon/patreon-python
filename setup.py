@@ -17,7 +17,7 @@ DESCRIPTION = (
 
 setup(
     name='patreon',
-    version='0.3.1',
+    version='0.4.0',
     description=DESCRIPTION,
     url='http://github.com/Patreon/patreon-python',
     author='Patreon',
@@ -27,7 +27,9 @@ setup(
         exclude=['examples', 'examples.*', 'test', 'test.*']
     ),
     setup_requires=setup_requires,
-    install_requires=['requests'],
+    install_requires=[
+        'requests',
+    ],
     tests_require=[
         'pytest',
         'pytest-cov',
