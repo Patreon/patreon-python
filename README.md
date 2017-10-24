@@ -102,12 +102,17 @@ second_patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=n
 Developing
 ---
 1. Clone this repo
-2. `virtualenv venv`
-3. `source venv/bin/activate`
-4. `pip install -e .`
-4. `pip install -r dev-requirements.txt`
-5. `git checkout -b my-branch-name`
-6. make your edits, writing tests for any new functionality
-7. make sure tests pass with `python setup.py test`
-8. `git push`
-9. Open a pull request, explaining your changes (both problem and solution) clearly
+1. Install dependencies
+    * If you're on Python 3:
+        ```
+        python -m venv venv && source venv/bin/activate && python setup.py develop
+        ```
+    * If you're on Python 2:
+        ```
+        virtualenv venv && source venv/bin/activate && pip install -e . && pip install -r dev-requirements.txt
+        ```
+1. `git checkout -b my-branch-name`
+1. make your edits, writing tests for any new functionality
+1. make sure tests pass with `python setup.py test`
+1. `git push`
+1. Open a pull request, explaining your changes (both problem and solution) clearly
