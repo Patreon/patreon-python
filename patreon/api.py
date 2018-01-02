@@ -90,7 +90,7 @@ class API(object):
 
     def __get_json(self, suffix):
         response = requests.get(
-            "https://api.patreon.com/oauth2/api/{}".format(suffix),
+            "https://www.patreon.com/api/oauth2/api/{}".format(suffix),
             headers={'Authorization': "Bearer {}".format(self.access_token)}
         )
         return response.json()

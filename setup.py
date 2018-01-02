@@ -21,7 +21,7 @@ setup(
     description=DESCRIPTION,
     url='http://github.com/Patreon/patreon-python',
     author='Patreon',
-    author_email='david@patreon.com',
+    author_email='platform@patreon.com',
     license='Apache 2.0',
     packages=find_packages(
         exclude=['examples', 'examples.*', 'test', 'test.*']
