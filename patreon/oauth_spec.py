@@ -23,7 +23,7 @@ def test_get_tokens_requests_tokens_as_expected(post, client):
     )
 
     post.assert_called_once_with(
-        'https://api.patreon.com/oauth2/token',
+        'https://www.patreon.com/api/oauth2/token',
         params={
             'grant_type': 'authorization_code',
             'code': MOCK_CODE,
@@ -42,7 +42,7 @@ def test_refresh_token_gets_a_new_token_as_expected(post, client):
     )
 
     post.assert_called_once_with(
-        'https://api.patreon.com/oauth2/token',
+        'https://www.patreon.com/api/oauth2/token',
         params={
             'grant_type': 'refresh_token',
             'refresh_token': MOCK_REFRESH_TOKEN,

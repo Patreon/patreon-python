@@ -9,7 +9,7 @@ from patreon.version_compatibility import urllib_parse
 from patreon.version_compatibility.utc_timezone import utc_timezone
 
 MOCK_CAMPAIGN_ID = 12
-API_ROOT_ENDPOINT = 'https://api.patreon.com/oauth2/api/'
+API_ROOT_ENDPOINT = 'https://www.patreon.com/api/oauth2/api/'
 MOCK_ACCESS_TOKEN = 'mock token'
 MOCK_CURSOR_VALUE = 'Mock Cursor Value'
 

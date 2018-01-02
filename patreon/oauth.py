@@ -27,7 +27,7 @@ class OAuth(object):
     @staticmethod
     def __update_token(params):
         response = requests.post(
-            "https://api.patreon.com/oauth2/token",
+            "https://www.patreon.com/api/oauth2/token",
             params=params
         )
         return response.json()
