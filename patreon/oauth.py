@@ -1,5 +1,7 @@
 import requests
 
+from patreon.utils import user_agent_string
+
 
 class OAuth(object):
     def __init__(self, client_id, client_secret):
@@ -28,6 +30,9 @@ class OAuth(object):
     def __update_token(params):
         response = requests.post(
             "https://www.patreon.com/api/oauth2/token",
-            params=params
+            params=params,
+            headers={
+                'User-Agent': user_agent_string(),
+            }
         )
         return response.json()

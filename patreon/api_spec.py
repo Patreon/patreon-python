@@ -5,6 +5,7 @@ import mock
 from patreon import api
 from patreon.jsonapi import url_util
 from patreon.jsonapi.parser import JSONAPIParser
+from patreon.utils import user_agent_string
 from patreon.version_compatibility import urllib_parse
 from patreon.version_compatibility.utc_timezone import utc_timezone
 
@@ -13,7 +14,10 @@ API_ROOT_ENDPOINT = 'https://www.patreon.com/api/oauth2/api/'
 MOCK_ACCESS_TOKEN = 'mock token'
 MOCK_CURSOR_VALUE = 'Mock Cursor Value'
 
-DEFAULT_API_HEADERS = {'Authorization': 'Bearer ' + MOCK_ACCESS_TOKEN}
+DEFAULT_API_HEADERS = {
+    'Authorization': 'Bearer ' + MOCK_ACCESS_TOKEN,
+    'User-Agent': user_agent_string(),
+}
 
 client = api.API(access_token=MOCK_ACCESS_TOKEN)
 

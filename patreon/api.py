@@ -3,6 +3,7 @@ import requests
 from patreon.jsonapi.parser import JSONAPIParser
 from patreon.jsonapi.url_util import build_url
 from patreon.schemas import campaign
+from patreon.utils import user_agent_string
 from patreon.version_compatibility.utc_timezone import utc_timezone
 from patreon.version_compatibility.urllib_parse import urlencode, urlparse, parse_qs
 
@@ -91,7 +92,10 @@ class API(object):
     def __get_json(self, suffix):
         response = requests.get(
             "https://www.patreon.com/api/oauth2/api/{}".format(suffix),
-            headers={'Authorization': "Bearer {}".format(self.access_token)}
+            headers={
+                'Authorization': "Bearer {}".format(self.access_token),
+                'User-Agent': user_agent_string(),
+            }
         )
         return response.json()
 

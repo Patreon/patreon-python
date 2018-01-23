@@ -2,6 +2,7 @@ import mock
 import pytest
 
 from patreon import oauth
+from patreon.utils import user_agent_string
 
 MOCK_CLIENT_ID = 'Mock Client ID'
 MOCK_CLIENT_SECRET = 'Mock Client Secret'
@@ -31,6 +32,9 @@ def test_get_tokens_requests_tokens_as_expected(post, client):
             'client_secret': MOCK_CLIENT_SECRET,
             'redirect_uri': MOCK_REDIRECT_URI,
         },
+        headers={
+            'User-Agent': user_agent_string(),
+        },
     )
 
 
@@ -48,5 +52,8 @@ def test_refresh_token_gets_a_new_token_as_expected(post, client):
             'refresh_token': MOCK_REFRESH_TOKEN,
             'client_id': MOCK_CLIENT_ID,
             'client_secret': MOCK_CLIENT_SECRET,
-        }
+        },
+        headers={
+            'User-Agent': user_agent_string(),
+        },
     )
