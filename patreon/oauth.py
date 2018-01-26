@@ -18,7 +18,7 @@ class OAuth(object):
             "redirect_uri": redirect_uri
         })
 
-    def refresh_token(self, refresh_token, redirect_uri):
+    def refresh_token(self, refresh_token, redirect_uri=None):
         return self.__update_token({
             "grant_type": "refresh_token",
             "refresh_token": refresh_token,
