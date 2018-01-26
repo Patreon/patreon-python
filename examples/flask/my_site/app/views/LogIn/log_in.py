@@ -9,9 +9,11 @@ class LogIn(base_view.View):
             "?response_type=code"
             "&client_id={client_id}"
             "&redirect_uri={redirect_uri}"
+            "&state={oauth_csrf}"
         ).format(
             client_id=config.patreon_client_id,
-            redirect_uri=config.patreon_redirect_uri
+            redirect_uri=config.patreon_redirect_uri,
+            oauth_csrf=config.oauth_csrf,
         )
         return {
             'log_in_url': log_in_url

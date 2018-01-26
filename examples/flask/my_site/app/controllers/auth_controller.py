@@ -25,6 +25,8 @@ def landing_page():
 def oauth_redirect():
     # https://www.patreon.com/platform/documentation/oauth -- Step 2
     # After authorizing this app to access their Patreon data, the user is redirected back here.
+    if request.args.get('state') != config.oauth_csrf:
+        abort(403)
 
     # https://www.patreon.com/platform/documentation/oauth -- Step 3
     # Use the code provided as a query parameter to get the user's access token and refresh token
