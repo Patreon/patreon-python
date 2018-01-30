@@ -17,7 +17,7 @@ DESCRIPTION = (
 
 setup(
     name='patreon',
-    version='0.4.0',
+    version='0.5.0',
     description=DESCRIPTION,
     url='http://github.com/Patreon/patreon-python',
     author='Patreon',
