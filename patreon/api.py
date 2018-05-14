@@ -70,7 +70,7 @@ class API(object):
         if current_dict is None or (head is not None and tail is None):
             return None
         # Path stopped before leaf was reached
-        elif current_dict and type(current_dict) != six.text_type:
+        elif current_dict and (type(current_dict) != six.text_type) or type(current_dict != str):
             raise Exception(
                 'Provided cursor path did not result in a link', current_dict
             )
