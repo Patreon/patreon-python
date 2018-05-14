@@ -6,8 +6,8 @@ from patreon import api
 from patreon.jsonapi import url_util
 from patreon.jsonapi.parser import JSONAPIParser
 from patreon.utils import user_agent_string
-from patreon.version_compatibility import urllib_parse
 from patreon.version_compatibility.utc_timezone import utc_timezone
+from six.moves.urllib.parse import urlencode
 
 MOCK_CAMPAIGN_ID = 12
 API_ROOT_ENDPOINT = 'https://www.patreon.com/api/oauth2/api/'
@@ -35,7 +35,7 @@ def api_url(*segments, **query):
         del query['includes']
 
     if query:
-        path += '?' + urllib_parse.urlencode(query)
+        path += '?' + urlencode(query)
 
     return url_util.build_url(
         API_ROOT_ENDPOINT + path,
