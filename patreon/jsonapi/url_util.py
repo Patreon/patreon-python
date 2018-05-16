@@ -1,5 +1,6 @@
 from collections import OrderedDict
-from six.moves.urllib.parse import urlencode
+
+from patreon.version_compatibility.urllib_parse import urlencode
 
 
 def joined_or_null(arr):
