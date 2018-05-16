@@ -29,7 +29,7 @@ setup(
     setup_requires=setup_requires,
     install_requires=[
         'requests',
-        'six==1.10.0',
+        'six>=1.10.0',
     ],
     tests_require=[
         'pytest',
