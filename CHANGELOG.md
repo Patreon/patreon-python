@@ -1,5 +1,6 @@
-# 0.5.0
+# 0.5.1
 
+* Use six module to handle version compatibility
 * Make URL query param ordering consistent
 * Use a first-party JSONAPIParser
 * README improvements

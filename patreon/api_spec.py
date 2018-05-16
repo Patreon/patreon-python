@@ -160,8 +160,8 @@ def test_can_fetch_api_and_patrons():
 @api_test()
 def test_can_fetch_api_and_patrons_with_custom_includes():
     expected_url = api_url(
-        'current_user',
-        'campaigns',
+        six.text_type('current_user'),
+        six.text_type('campaigns'),
         includes=['creator'],
     )
 
@@ -181,7 +181,7 @@ def test_can_fetch_page_of_pledges():
     query_params = {'page[count]': PAGE_COUNT}
 
     expected_url = api_url(
-        'campaigns', MOCK_CAMPAIGN_ID, 'pledges', **query_params
+        six.text_type('campaigns'), MOCK_CAMPAIGN_ID, six.text_type('pledges'), **query_params
     )
 
     return expected_url, response
@@ -204,7 +204,7 @@ def test_can_fetch_page_of_pledges_with_arbitrary_cursor():
     }
 
     expected_url = api_url(
-        'campaigns', MOCK_CAMPAIGN_ID, 'pledges', **query_params
+        six.text_type('campaigns'), MOCK_CAMPAIGN_ID, six.text_type('pledges'), **query_params
     )
 
     return expected_url, response
@@ -235,7 +235,7 @@ def test_can_fetch_page_of_pledges_with_custom_options_without_tzinfo():
     }
 
     expected_url = api_url(
-        'campaigns', MOCK_CAMPAIGN_ID, 'pledges', **query_params
+        six.text_type('campaigns'), MOCK_CAMPAIGN_ID, six.text_type('pledges'), **query_params
     )
 
     return expected_url, response
@@ -266,7 +266,7 @@ def test_can_fetch_page_of_pledges_with_custom_options_with_tzinfo():
     }
 
     expected_url = api_url(
-        'campaigns', MOCK_CAMPAIGN_ID, 'pledges', **query_params
+        six.text_type('campaigns'), MOCK_CAMPAIGN_ID, six.text_type('pledges'), **query_params
     )
 
     return expected_url, response

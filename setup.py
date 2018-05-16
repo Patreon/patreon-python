@@ -17,7 +17,7 @@ DESCRIPTION = (
 
 setup(
     name='patreon',
-    version='0.5.0',
+    version='0.5.1',
     description=DESCRIPTION,
     url='http://github.com/Patreon/patreon-python',
     author='Patreon',
@@ -29,6 +29,7 @@ setup(
     setup_requires=setup_requires,
     install_requires=[
         'requests',
+        'six==1.10.0',
     ],
     tests_require=[
         'pytest',
@@ -37,7 +38,7 @@ setup(
     ],
     zip_safe=True,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
@@ -50,5 +51,6 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ]
 )
