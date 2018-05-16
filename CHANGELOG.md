@@ -1,6 +1,10 @@
 # 0.5.1
-
+## Added
 * Use six module to handle version compatibility
+## Fixed
+* Fixed the error that occured when calling extract_cursor in python2
+
+# 0.5.0
 * Make URL query param ordering consistent
 * Use a first-party JSONAPIParser
 * README improvements
