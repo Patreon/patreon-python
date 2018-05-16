@@ -1,20 +1,18 @@
 import datetime
 import functools
 import mock
-import six
 
 from patreon import api
 from patreon.jsonapi import url_util
 from patreon.jsonapi.parser import JSONAPIParser
 from patreon.utils import user_agent_string
+from patreon.version_compatibility import urllib_parse
 from patreon.version_compatibility.utc_timezone import utc_timezone
-from six.moves.urllib.parse import urlencode
 
 MOCK_CAMPAIGN_ID = 12
-API_ROOT_ENDPOINT = six.text_type('https://www.patreon.com/api/oauth2/api/')
-MOCK_ACCESS_TOKEN = six.text_type('mock token')
-MOCK_CURSOR_VALUE = six.text_type('Mock Cursor Value')
-
+API_ROOT_ENDPOINT = 'https://www.patreon.com/api/oauth2/api/'
+MOCK_ACCESS_TOKEN = 'mock token'
+MOCK_CURSOR_VALUE = 'Mock Cursor Value'
 
 DEFAULT_API_HEADERS = {
     'Authorization': 'Bearer ' + MOCK_ACCESS_TOKEN,
@@ -25,7 +23,7 @@ client = api.API(access_token=MOCK_ACCESS_TOKEN)
 
 
 def api_url(*segments, **query):
-    path = six.text_type('/').join(map(six.text_type, segments))
+    path = '/'.join(map(str, segments))
 
     fields = query.get('fields', None)
     includes = query.get('includes', None)
@@ -37,7 +35,7 @@ def api_url(*segments, **query):
         del query['includes']
 
     if query:
-        path += '?' + urlencode(query)
+        path += '?' + urllib_parse.urlencode(query)
 
     return url_util.build_url(
         API_ROOT_ENDPOINT + path,
@@ -87,10 +85,10 @@ def api_test(method='GET', **response_kwargs):
 def test_extract_cursor_returns_cursor_when_provided():
     assert MOCK_CURSOR_VALUE == api.API.extract_cursor(
         {
-            six.text_type('links'):
+            'links':
                 {
-                    six.text_type('next'):
-                        six.text_type('https://patreon.com/members?page[cursor]=') +
+                    'next':
+                        'https://patreon.com/members?page[cursor]=' +
                         MOCK_CURSOR_VALUE,
                 },
         }
@@ -100,8 +98,8 @@ def test_extract_cursor_returns_cursor_when_provided():
 def test_extract_cursor_returns_None_when_no_cursor_provided():
     assert None is api.API.extract_cursor(
         {
-            six.text_type('links'): {
-                six.text_type('next'): six.text_type('https://patreon.com/members?page[offset]=25'),
+            'links': {
+                'next': 'https://patreon.com/members?page[offset]=25',
             },
         }
     )
@@ -109,8 +107,8 @@ def test_extract_cursor_returns_None_when_no_cursor_provided():
 
 def test_extract_cursor_returns_None_when_link_is_not_a_string():
     assert None is api.API.extract_cursor({
-        six.text_type('links'): {
-            six.text_type('next'): None,
+        'links': {
+            'next': None,
         },
     })
 
@@ -120,8 +118,8 @@ def test_extract_cursor_returns_None_when_link_is_malformed():
 
     try:
         api.API.extract_cursor({
-            six.text_type('links'): {
-                six.text_type('next'): 12,
+            'links': {
+                'next': 12,
             },
         })
 
@@ -134,12 +132,12 @@ def test_extract_cursor_returns_None_when_link_is_malformed():
 
 @api_test()
 def test_can_fetch_user():
-    return api_url(six.text_type('current_user')), client.fetch_user()
+    return api_url('current_user'), client.fetch_user()
 
 
 @api_test()
 def test_can_fetch_campaign():
-    expected_url = api_url(six.text_type('current_user'), six.text_type('campaigns'))
+    expected_url = api_url('current_user', 'campaigns')
     response = client.fetch_campaign()
     return expected_url, response
 
@@ -149,9 +147,9 @@ def test_can_fetch_api_and_patrons():
     response = client.fetch_campaign_and_patrons()
 
     expected_url = api_url(
-        six.text_type('current_user'),
-        six.text_type('campaigns'),
-        includes=[six.text_type('rewards'), six.text_type('creator'), six.text_type('goals'), six.text_type('pledges')],
+        'current_user',
+        'campaigns',
+        includes=['rewards', 'creator', 'goals', 'pledges'],
     )
 
     return expected_url, response
