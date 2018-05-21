@@ -1,11 +1,12 @@
 import requests
+import six
 
 from patreon.jsonapi.parser import JSONAPIParser
 from patreon.jsonapi.url_util import build_url
 from patreon.schemas import campaign
 from patreon.utils import user_agent_string
 from patreon.version_compatibility.utc_timezone import utc_timezone
-from patreon.version_compatibility.urllib_parse import urlencode, urlparse, parse_qs
+from six.moves.urllib.parse import urlparse, parse_qs, urlencode
 
 
 class API(object):
@@ -69,7 +70,7 @@ class API(object):
         if current_dict is None or (head is not None and tail is None):
             return None
         # Path stopped before leaf was reached
-        elif current_dict and type(current_dict) != str:
+        elif current_dict and type(current_dict) != six.text_type:
             raise Exception(
                 'Provided cursor path did not result in a link', current_dict
             )
