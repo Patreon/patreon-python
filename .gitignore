@@ -16,3 +16,5 @@
 /.eggs/*
 
 .idea/
+/build
+/.pytest_cache
