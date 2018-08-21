@@ -34,7 +34,6 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python setup.py test
-      - store_artifacts:
+            python setup.py testci
+      - store_test_results:
           path: test-reports
-          destination: test-reports
