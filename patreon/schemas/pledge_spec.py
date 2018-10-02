@@ -13,6 +13,7 @@ def attributes():
         'pledge_cap_cents',
         'patron_pays_fees',
         'unread_count',
+        'is_paused',
     ]
 
 
@@ -46,6 +47,7 @@ def test_schema_has_expected_default_attributes():
     assert pledge.Attributes.created_at in pledge.default_attributes
     assert pledge.Attributes.pledge_cap_cents in pledge.default_attributes
     assert pledge.Attributes.patron_pays_fees in pledge.default_attributes
+    assert pledge.Attributes.is_paused in pledge.default_attributes
 
 
 def test_schema_has_expected_default_relationships():
