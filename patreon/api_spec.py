@@ -1,3 +1,7 @@
+# api_spec.py
+# This file is auto-generated from the same code that generates
+# https://docs.patreon.com. Community pull requests against this
+# file may not be accepted.
 import datetime
 import functools
 import mock
@@ -10,10 +14,11 @@ from patreon.utils import user_agent_string
 from patreon.version_compatibility.utc_timezone import utc_timezone
 from six.moves.urllib.parse import urlencode
 
-MOCK_CAMPAIGN_ID = 12
+MOCK_ID = 12
 API_ROOT_ENDPOINT =  'https://www.patreon.com/api/oauth2/v2/'
 MOCK_ACCESS_TOKEN =  'mock token'
 MOCK_CURSOR_VALUE =  'Mock Cursor Value'
+PAGE_COUNT = 25
 
 
 DEFAULT_API_HEADERS = {
@@ -133,132 +138,351 @@ def test_extract_cursor_returns_None_when_link_is_malformed():
 
 
 @api_test()
-def test_can_fetch_user():
-    return api_url('identity'), client.fetch_user()
-
-
-@api_test()
-def test_can_fetch_campaigns():
-    expected_url = api_url('campaigns')
-    response = client.fetch_campaigns()
-    return expected_url, response
-
-
-@api_test()
-def test_can_fetch_campaigns():
-    response = client.fetch_campaigns()
-
-    expected_url = api_url(
-         'campaigns',
-    )
-
-    return expected_url, response
-
-
-@api_test()
-def test_can_fetch_api_and_campaigns_with_custom_includes():
-    expected_url = api_url('campaigns', includes=['creator'])
-
-    response = client.fetch_campaigns(includes=['creator'])
-
-    return expected_url, response
-
-
-@api_test()
-def test_can_fetch_members():
-    PAGE_COUNT = 25
-
-    response = client.fetch_members(MOCK_CAMPAIGN_ID, PAGE_COUNT)
-
+def test_get_campaigns():
+    url = 'campaigns'
     query_params = {'page[count]': PAGE_COUNT}
-
-    expected_url = api_url(
-         'campaigns', MOCK_CAMPAIGN_ID, 'members', **query_params
-    )
-
-    return expected_url, response
-
-
-@api_test()
-def test_can_fetch_page_of_members_with_arbitrary_cursor():
-    PAGE_COUNT = 25
-    MOCK_CURSOR = 'Mock Cursor'
-
-    response = client.fetch_members(
-        MOCK_CAMPAIGN_ID,
+    expected_url = api_url(url, **query_params)
+    response = client.get_campaigns(
         PAGE_COUNT,
-        cursor=MOCK_CURSOR,
-    )
-
-    query_params = {
-        'page[count]': PAGE_COUNT,
-        'page[cursor]': MOCK_CURSOR,
-    }
-
-    expected_url = api_url(
-         'campaigns', MOCK_CAMPAIGN_ID, 'members', **query_params
     )
 
     return expected_url, response
 
 
 @api_test()
-def test_can_fetch_page_of_members_with_custom_options_without_tzinfo():
-    PAGE_COUNT = 25
+def test_get_campaigns_with_includes():
+    url = 'campaigns'
+    query_params = {'page[count]': PAGE_COUNT}
+    expected_url = api_url(url, includes=['mock'], **query_params)
+    response = client.get_campaigns(
+        PAGE_COUNT,
+        includes=['mock']
+    )
+
+    return expected_url, response
+
+@api_test()
+def test_get_campaigns_with_arbitrary_cursor():
+    url = 'campaigns'
+    query_params = {'page[count]': PAGE_COUNT, 'page[cursor]': MOCK_CURSOR_VALUE}
+    expected_url = api_url(url, **query_params)
+    response = client.get_campaigns(
+                PAGE_COUNT,
+        cursor=MOCK_CURSOR_VALUE,
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_campaigns_with_custom_options_without_tzinfo():
     MOCK_CURSOR = datetime.datetime.now()
     MOCK_FIELDS = {'field': ['value']}
     MOCK_INCLUDES = ['mock includes']
 
     EXPECTED_CURSOR = MOCK_CURSOR.replace(tzinfo=utc_timezone()).isoformat()
-
-    response = client.fetch_members(
-        MOCK_CAMPAIGN_ID,
-        PAGE_COUNT,
+    url = 'campaigns'
+    query_params = {
+        'page[count]': PAGE_COUNT,
+        'page[cursor]': MOCK_CURSOR,
+        'includes': MOCK_INCLUDES,
+        'fields': MOCK_FIELDS,
+    }
+    expected_url = api_url(url, **query_params)
+    response = client.get_campaigns(
+                PAGE_COUNT,
         cursor=MOCK_CURSOR,
         includes=MOCK_INCLUDES,
         fields=MOCK_FIELDS,
     )
 
+    return expected_url, response
+
+
+def test_get_campaigns_with_custom_options_without_tzinfo():
+    MOCK_CURSOR = datetime.datetime.now()
+    MOCK_FIELDS = {'field': ['value']}
+    MOCK_INCLUDES = ['mock includes']
+
+    EXPECTED_CURSOR = MOCK_CURSOR.isoformat()
+    url = 'campaigns'
     query_params = {
         'page[count]': PAGE_COUNT,
-        'page[cursor]': EXPECTED_CURSOR,
+        'page[cursor]': MOCK_CURSOR,
         'includes': MOCK_INCLUDES,
         'fields': MOCK_FIELDS,
     }
-
-    expected_url = api_url(
-         'campaigns', MOCK_CAMPAIGN_ID, 'members', **query_params
+    expected_url = api_url(url, **query_params)
+    response = client.get_campaigns(
+                PAGE_COUNT,
+        cursor=MOCK_CURSOR,
+        includes=MOCK_INCLUDES,
+        fields=MOCK_FIELDS,
     )
 
     return expected_url, response
 
 
 @api_test()
-def test_can_fetch_page_of_pledges_with_custom_options_with_tzinfo():
-    PAGE_COUNT = 25
-    MOCK_CURSOR = datetime.datetime.now().replace(tzinfo=utc_timezone())
+def test_get_identity():
+    url = 'identity'
+    expected_url = api_url(url) 
+    response = client.get_identity()
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_identity_with_includes():
+    url = 'identity'
+    expected_url = api_url(url, includes=['mock']) 
+    response = client.get_identity(includes=['mock'])
+
+    return expected_url, response
+
+
+
+@api_test()
+def test_get_webhooks():
+    url = 'webhooks'
+    query_params = {'page[count]': PAGE_COUNT}
+    expected_url = api_url(url, **query_params)
+    response = client.get_webhooks(
+        PAGE_COUNT,
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_webhooks_with_includes():
+    url = 'webhooks'
+    query_params = {'page[count]': PAGE_COUNT}
+    expected_url = api_url(url, includes=['mock'], **query_params)
+    response = client.get_webhooks(
+        PAGE_COUNT,
+        includes=['mock']
+    )
+
+    return expected_url, response
+
+@api_test()
+def test_get_webhooks_with_arbitrary_cursor():
+    url = 'webhooks'
+    query_params = {'page[count]': PAGE_COUNT, 'page[cursor]': MOCK_CURSOR_VALUE}
+    expected_url = api_url(url, **query_params)
+    response = client.get_webhooks(
+                PAGE_COUNT,
+        cursor=MOCK_CURSOR_VALUE,
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_webhooks_with_custom_options_without_tzinfo():
+    MOCK_CURSOR = datetime.datetime.now()
     MOCK_FIELDS = {'field': ['value']}
     MOCK_INCLUDES = ['mock includes']
 
-    EXPECTED_CURSOR = MOCK_CURSOR.isoformat()
-
-    response = client.fetch_members(
-        MOCK_CAMPAIGN_ID,
-        PAGE_COUNT,
+    EXPECTED_CURSOR = MOCK_CURSOR.replace(tzinfo=utc_timezone()).isoformat()
+    url = 'webhooks'
+    query_params = {
+        'page[count]': PAGE_COUNT,
+        'page[cursor]': MOCK_CURSOR,
+        'includes': MOCK_INCLUDES,
+        'fields': MOCK_FIELDS,
+    }
+    expected_url = api_url(url, **query_params)
+    response = client.get_webhooks(
+                PAGE_COUNT,
         cursor=MOCK_CURSOR,
         includes=MOCK_INCLUDES,
         fields=MOCK_FIELDS,
     )
 
+    return expected_url, response
+
+
+def test_get_webhooks_with_custom_options_without_tzinfo():
+    MOCK_CURSOR = datetime.datetime.now()
+    MOCK_FIELDS = {'field': ['value']}
+    MOCK_INCLUDES = ['mock includes']
+
+    EXPECTED_CURSOR = MOCK_CURSOR.isoformat()
+    url = 'webhooks'
     query_params = {
         'page[count]': PAGE_COUNT,
-        'page[cursor]': EXPECTED_CURSOR,
+        'page[cursor]': MOCK_CURSOR,
         'includes': MOCK_INCLUDES,
         'fields': MOCK_FIELDS,
     }
-
-    expected_url = api_url(
-        'campaigns', MOCK_CAMPAIGN_ID, 'members', **query_params
+    expected_url = api_url(url, **query_params)
+    response = client.get_webhooks(
+                PAGE_COUNT,
+        cursor=MOCK_CURSOR,
+        includes=MOCK_INCLUDES,
+        fields=MOCK_FIELDS,
     )
 
     return expected_url, response
+
+
+@api_test()
+def test_get_campaigns_by_id_members():
+    url = 'campaigns/{}/members'.format(MOCK_ID)
+    query_params = {'page[count]': PAGE_COUNT}
+    expected_url = api_url(url, **query_params)
+    response = client.get_campaigns_by_id_members(
+        MOCK_ID,
+        PAGE_COUNT,
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_campaigns_by_id_members_with_includes():
+    url = 'campaigns/{}/members'.format(MOCK_ID)
+    query_params = {'page[count]': PAGE_COUNT}
+    expected_url = api_url(url, includes=['mock'], **query_params)
+    response = client.get_campaigns_by_id_members(
+        MOCK_ID,
+        PAGE_COUNT,
+        includes=['mock']
+    )
+
+    return expected_url, response
+
+@api_test()
+def test_get_campaigns_by_id_members_with_arbitrary_cursor():
+    url = 'campaigns/{}/members'.format(MOCK_ID)
+    query_params = {'page[count]': PAGE_COUNT, 'page[cursor]': MOCK_CURSOR_VALUE}
+    expected_url = api_url(url, **query_params)
+    response = client.get_campaigns_by_id_members(
+        MOCK_ID,         PAGE_COUNT,
+        cursor=MOCK_CURSOR_VALUE,
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_campaigns_by_id_members_with_custom_options_without_tzinfo():
+    MOCK_CURSOR = datetime.datetime.now()
+    MOCK_FIELDS = {'field': ['value']}
+    MOCK_INCLUDES = ['mock includes']
+
+    EXPECTED_CURSOR = MOCK_CURSOR.replace(tzinfo=utc_timezone()).isoformat()
+    url = 'campaigns/{}/members'.format(MOCK_ID)
+    query_params = {
+        'page[count]': PAGE_COUNT,
+        'page[cursor]': MOCK_CURSOR,
+        'includes': MOCK_INCLUDES,
+        'fields': MOCK_FIELDS,
+    }
+    expected_url = api_url(url, **query_params)
+    response = client.get_campaigns_by_id_members(
+        MOCK_ID,         PAGE_COUNT,
+        cursor=MOCK_CURSOR,
+        includes=MOCK_INCLUDES,
+        fields=MOCK_FIELDS,
+    )
+
+    return expected_url, response
+
+
+def test_get_campaigns_by_id_members_with_custom_options_without_tzinfo():
+    MOCK_CURSOR = datetime.datetime.now()
+    MOCK_FIELDS = {'field': ['value']}
+    MOCK_INCLUDES = ['mock includes']
+
+    EXPECTED_CURSOR = MOCK_CURSOR.isoformat()
+    url = 'campaigns/{}/members'.format(MOCK_ID)
+    query_params = {
+        'page[count]': PAGE_COUNT,
+        'page[cursor]': MOCK_CURSOR,
+        'includes': MOCK_INCLUDES,
+        'fields': MOCK_FIELDS,
+    }
+    expected_url = api_url(url, **query_params)
+    response = client.get_campaigns_by_id_members(
+        MOCK_ID,         PAGE_COUNT,
+        cursor=MOCK_CURSOR,
+        includes=MOCK_INCLUDES,
+        fields=MOCK_FIELDS,
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_campaigns_by_id():
+    url = 'campaigns/{}'.format(MOCK_ID)
+    expected_url = api_url(url) 
+    response = client.get_campaigns_by_id(
+        MOCK_ID,
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_campaigns_by_id_with_includes():
+    url = 'campaigns/{}'.format(MOCK_ID)
+    expected_url = api_url(url, includes=['mock']) 
+    response = client.get_campaigns_by_id(
+        MOCK_ID,
+        includes=['mock']
+    )
+
+    return expected_url, response
+
+
+
+@api_test()
+def test_get_webhooks_by_id():
+    url = 'webhooks/{}'.format(MOCK_ID)
+    expected_url = api_url(url) 
+    response = client.get_webhooks_by_id(
+        MOCK_ID,
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_webhooks_by_id_with_includes():
+    url = 'webhooks/{}'.format(MOCK_ID)
+    expected_url = api_url(url, includes=['mock']) 
+    response = client.get_webhooks_by_id(
+        MOCK_ID,
+        includes=['mock']
+    )
+
+    return expected_url, response
+
+
+
+@api_test()
+def test_get_members_by_id():
+    url = 'members/{}'.format(MOCK_ID)
+    expected_url = api_url(url) 
+    response = client.get_members_by_id(
+        MOCK_ID,
+    )
+
+    return expected_url, response
+
+
+@api_test()
+def test_get_members_by_id_with_includes():
+    url = 'members/{}'.format(MOCK_ID)
+    expected_url = api_url(url, includes=['mock']) 
+    response = client.get_members_by_id(
+        MOCK_ID,
+        includes=['mock']
+    )
+
+    return expected_url, response
+
