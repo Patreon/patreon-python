@@ -11,7 +11,7 @@ from patreon.version_compatibility.utc_timezone import utc_timezone
 from six.moves.urllib.parse import urlencode
 
 MOCK_CAMPAIGN_ID = 12
-API_ROOT_ENDPOINT =  'https://www.patreon.com/api/oauth2/api/'
+API_ROOT_ENDPOINT =  'https://www.patreon.com/api/oauth2/v2/'
 MOCK_ACCESS_TOKEN =  'mock token'
 MOCK_CURSOR_VALUE =  'Mock Cursor Value'
 
@@ -134,65 +134,57 @@ def test_extract_cursor_returns_None_when_link_is_malformed():
 
 @api_test()
 def test_can_fetch_user():
-    return api_url( 'current_user'), client.fetch_user()
+    return api_url('identity'), client.fetch_user()
 
 
 @api_test()
-def test_can_fetch_campaign():
-    expected_url = api_url( 'current_user',  'campaigns')
-    response = client.fetch_campaign()
+def test_can_fetch_campaigns():
+    expected_url = api_url('campaigns')
+    response = client.fetch_campaigns()
     return expected_url, response
 
 
 @api_test()
-def test_can_fetch_api_and_patrons():
-    response = client.fetch_campaign_and_patrons()
+def test_can_fetch_campaigns():
+    response = client.fetch_campaigns()
 
     expected_url = api_url(
-         'current_user',
          'campaigns',
-        includes=[ 'rewards',  'creator',  'goals',  'pledges'],
     )
 
     return expected_url, response
 
 
 @api_test()
-def test_can_fetch_api_and_patrons_with_custom_includes():
-    expected_url = api_url(
-         'current_user',
-         'campaigns',
-        includes=['creator'],
-    )
+def test_can_fetch_api_and_campaigns_with_custom_includes():
+    expected_url = api_url('campaigns', includes=['creator'])
 
-    response = client.fetch_campaign_and_patrons(
-        includes=['creator'],
-    )
+    response = client.fetch_campaigns(includes=['creator'])
 
     return expected_url, response
 
 
 @api_test()
-def test_can_fetch_page_of_pledges():
+def test_can_fetch_members():
     PAGE_COUNT = 25
 
-    response = client.fetch_page_of_pledges(MOCK_CAMPAIGN_ID, PAGE_COUNT)
+    response = client.fetch_members(MOCK_CAMPAIGN_ID, PAGE_COUNT)
 
     query_params = {'page[count]': PAGE_COUNT}
 
     expected_url = api_url(
-         'campaigns', MOCK_CAMPAIGN_ID,  'pledges', **query_params
+         'campaigns', MOCK_CAMPAIGN_ID, 'members', **query_params
     )
 
     return expected_url, response
 
 
 @api_test()
-def test_can_fetch_page_of_pledges_with_arbitrary_cursor():
+def test_can_fetch_page_of_members_with_arbitrary_cursor():
     PAGE_COUNT = 25
     MOCK_CURSOR = 'Mock Cursor'
 
-    response = client.fetch_page_of_pledges(
+    response = client.fetch_members(
         MOCK_CAMPAIGN_ID,
         PAGE_COUNT,
         cursor=MOCK_CURSOR,
@@ -204,14 +196,14 @@ def test_can_fetch_page_of_pledges_with_arbitrary_cursor():
     }
 
     expected_url = api_url(
-         'campaigns', MOCK_CAMPAIGN_ID,  'pledges', **query_params
+         'campaigns', MOCK_CAMPAIGN_ID, 'members', **query_params
     )
 
     return expected_url, response
 
 
 @api_test()
-def test_can_fetch_page_of_pledges_with_custom_options_without_tzinfo():
+def test_can_fetch_page_of_members_with_custom_options_without_tzinfo():
     PAGE_COUNT = 25
     MOCK_CURSOR = datetime.datetime.now()
     MOCK_FIELDS = {'field': ['value']}
@@ -219,7 +211,7 @@ def test_can_fetch_page_of_pledges_with_custom_options_without_tzinfo():
 
     EXPECTED_CURSOR = MOCK_CURSOR.replace(tzinfo=utc_timezone()).isoformat()
 
-    response = client.fetch_page_of_pledges(
+    response = client.fetch_members(
         MOCK_CAMPAIGN_ID,
         PAGE_COUNT,
         cursor=MOCK_CURSOR,
@@ -235,7 +227,7 @@ def test_can_fetch_page_of_pledges_with_custom_options_without_tzinfo():
     }
 
     expected_url = api_url(
-         'campaigns', MOCK_CAMPAIGN_ID,  'pledges', **query_params
+         'campaigns', MOCK_CAMPAIGN_ID, 'members', **query_params
     )
 
     return expected_url, response
@@ -250,7 +242,7 @@ def test_can_fetch_page_of_pledges_with_custom_options_with_tzinfo():
 
     EXPECTED_CURSOR = MOCK_CURSOR.isoformat()
 
-    response = client.fetch_page_of_pledges(
+    response = client.fetch_members(
         MOCK_CAMPAIGN_ID,
         PAGE_COUNT,
         cursor=MOCK_CURSOR,
@@ -266,7 +258,7 @@ def test_can_fetch_page_of_pledges_with_custom_options_with_tzinfo():
     }
 
     expected_url = api_url(
-        'campaigns', MOCK_CAMPAIGN_ID,  'pledges', **query_params
+        'campaigns', MOCK_CAMPAIGN_ID, 'members', **query_params
     )
 
     return expected_url, response

@@ -3,7 +3,6 @@ import six
 
 from patreon.jsonapi.parser import JSONAPIParser
 from patreon.jsonapi.url_util import build_url
-from patreon.schemas import campaign
 from patreon.utils import user_agent_string
 from patreon.version_compatibility.utc_timezone import utc_timezone
 from six.moves.urllib.parse import urlparse, parse_qs, urlencode
@@ -16,27 +15,28 @@ class API(object):
 
     def fetch_user(self, includes=None, fields=None):
         return self.__get_jsonapi_doc(
-            build_url('current_user', includes=includes, fields=fields)
+            build_url('identity', includes=includes, fields=fields)
         )
 
-    def fetch_campaign_and_patrons(self, includes=None, fields=None):
-        if not includes:
-            includes = campaign.default_relationships \
-                + [campaign.Relationships.pledges]
+    def fetch_campaigns(self, includes=None, fields=None):
         return self.fetch_campaign(includes=includes, fields=fields)
 
-    def fetch_campaign(self, includes=None, fields=None):
+    def fetch_campaigns(self, includes=None, fields=None):
         return self.__get_jsonapi_doc(
             build_url(
-                'current_user/campaigns', includes=includes, fields=fields
+                'campaigns', includes=includes, fields=fields
             )
         )
 
-    def fetch_page_of_pledges(
-            self, campaign_id, page_size, cursor=None, includes=None,
-            fields=None
-    ):
-        url = 'campaigns/{0}/pledges'.format(campaign_id)
+    def fetch_campaign(self, campaign_id, includes=None, fields=None):
+        return self.__get_jsonapi_doc(
+            build_url(
+                'campaigns/{0}'.format(campaign_id), includes=includes, fields=fields
+            )
+        )
+
+    def fetch_members(self, campaign_id, page_size, cursor=None, includes=None, fields=None):
+        url = url = 'campaigns/{0}/members'.format(campaign_id)
         params = {'page[count]': page_size}
         if cursor:
             try:
@@ -92,7 +92,7 @@ class API(object):
 
     def __get_json(self, suffix):
         response = requests.get(
-            "https://www.patreon.com/api/oauth2/api/{}".format(suffix),
+            "https://www.patreon.com/api/oauth2/v2/{}".format(suffix),
             headers={
                 'Authorization': "Bearer {}".format(self.access_token),
                 'User-Agent': user_agent_string(),
