@@ -10,20 +10,20 @@ from patreon.schemas import goal
 @pytest.fixture
 def attributes():
     return [
-            'amount_cents',
-            'title',
-            'description',
-            'created_at',
-            'reached_at',
-            'completed_percentage',
-        ]
+        'amount_cents',
+        'title',
+        'description',
+        'created_at',
+        'reached_at',
+        'completed_percentage',
+    ]
 
 
 @pytest.fixture
 def relationships():
     return [
-            'campaign',
-        ]
+        'campaign',
+    ]
 
 
 def test_schema_attributes_are_properly_formatted(attributes):

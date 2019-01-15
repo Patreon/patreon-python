@@ -10,24 +10,24 @@ from patreon.schemas import address
 @pytest.fixture
 def attributes():
     return [
-            'addressee',
-            'line_1',
-            'line_2',
-            'postal_code',
-            'city',
-            'state',
-            'country',
-            'phone_number',
-            'created_at',
-        ]
+        'addressee',
+        'line_1',
+        'line_2',
+        'postal_code',
+        'city',
+        'state',
+        'country',
+        'phone_number',
+        'created_at',
+    ]
 
 
 @pytest.fixture
 def relationships():
     return [
-            'user',
-            'campaigns',
-        ]
+        'user',
+        'campaigns',
+    ]
 
 
 def test_schema_attributes_are_properly_formatted(attributes):

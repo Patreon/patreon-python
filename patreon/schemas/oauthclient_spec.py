@@ -10,28 +10,28 @@ from patreon.schemas import oauthclient
 @pytest.fixture
 def attributes():
     return [
-            'client_secret',
-            'name',
-            'description',
-            'author_name',
-            'domain',
-            'version',
-            'icon_url',
-            'privacy_policy_url',
-            'tos_url',
-            'redirect_uris',
-            'default_scopes',
-        ]
+        'client_secret',
+        'name',
+        'description',
+        'author_name',
+        'domain',
+        'version',
+        'icon_url',
+        'privacy_policy_url',
+        'tos_url',
+        'redirect_uris',
+        'default_scopes',
+    ]
 
 
 @pytest.fixture
 def relationships():
     return [
-            'user',
-            'campaign',
-            'creator_token',
-            'apps',
-        ]
+        'user',
+        'campaign',
+        'creator_token',
+        'apps',
+    ]
 
 
 def test_schema_attributes_are_properly_formatted(attributes):

@@ -10,31 +10,31 @@ from patreon.schemas import benefit
 @pytest.fixture
 def attributes():
     return [
-            'title',
-            'description',
-            'benefit_type',
-            'rule_type',
-            'created_at',
-            'delivered_deliverables_count',
-            'not_delivered_deliverables_count',
-            'deliverables_due_today_count',
-            'next_deliverable_due_date',
-            'tiers_count',
-            'is_deleted',
-            'is_published',
-            'app_external_id',
-            'app_meta',
-        ]
+        'title',
+        'description',
+        'benefit_type',
+        'rule_type',
+        'created_at',
+        'delivered_deliverables_count',
+        'not_delivered_deliverables_count',
+        'deliverables_due_today_count',
+        'next_deliverable_due_date',
+        'tiers_count',
+        'is_deleted',
+        'is_published',
+        'app_external_id',
+        'app_meta',
+    ]
 
 
 @pytest.fixture
 def relationships():
     return [
-            'tiers',
-            'deliverables',
-            'campaign',
-            'campaign_installation',
-        ]
+        'tiers',
+        'deliverables',
+        'campaign',
+        'campaign_installation',
+    ]
 
 
 def test_schema_attributes_are_properly_formatted(attributes):

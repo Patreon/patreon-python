@@ -10,21 +10,21 @@ from patreon.schemas import webhook
 @pytest.fixture
 def attributes():
     return [
-            'triggers',
-            'uri',
-            'paused',
-            'last_attempted_at',
-            'num_consecutive_times_failed',
-            'secret',
-        ]
+        'triggers',
+        'uri',
+        'paused',
+        'last_attempted_at',
+        'num_consecutive_times_failed',
+        'secret',
+    ]
 
 
 @pytest.fixture
 def relationships():
     return [
-            'client',
-            'campaign',
-        ]
+        'client',
+        'campaign',
+    ]
 
 
 def test_schema_attributes_are_properly_formatted(attributes):

@@ -10,30 +10,30 @@ from patreon.schemas import user
 @pytest.fixture
 def attributes():
     return [
-            'email',
-            'first_name',
-            'last_name',
-            'full_name',
-            'is_email_verified',
-            'vanity',
-            'about',
-            'image_url',
-            'thumb_url',
-            'can_see_nsfw',
-            'created',
-            'url',
-            'like_count',
-            'hide_pledges',
-            'social_connections',
-        ]
+        'email',
+        'first_name',
+        'last_name',
+        'full_name',
+        'is_email_verified',
+        'vanity',
+        'about',
+        'image_url',
+        'thumb_url',
+        'can_see_nsfw',
+        'created',
+        'url',
+        'like_count',
+        'hide_pledges',
+        'social_connections',
+    ]
 
 
 @pytest.fixture
 def relationships():
     return [
-            'memberships',
-            'campaign',
-        ]
+        'memberships',
+        'campaign',
+    ]
 
 
 def test_schema_attributes_are_properly_formatted(attributes):
