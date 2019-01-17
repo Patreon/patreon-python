@@ -226,7 +226,7 @@ def test_get_campaigns_with_custom_options_without_tzinfo():
 @api_test()
 def test_get_identity():
     url = 'identity'
-    expected_url = api_url(url) 
+    expected_url = api_url(url)
     response = client.get_identity()
 
     return expected_url, response
@@ -235,7 +235,7 @@ def test_get_identity():
 @api_test()
 def test_get_identity_with_includes():
     url = 'identity'
-    expected_url = api_url(url, includes=['mock']) 
+    expected_url = api_url(url, includes=['mock'])
     response = client.get_identity(includes=['mock'])
 
     return expected_url, response
@@ -419,7 +419,7 @@ def test_get_campaigns_by_id_members_with_custom_options_without_tzinfo():
 @api_test()
 def test_get_campaigns_by_id():
     url = 'campaigns/{}'.format(MOCK_ID)
-    expected_url = api_url(url) 
+    expected_url = api_url(url)
     response = client.get_campaigns_by_id(
         MOCK_ID,
     )
@@ -430,7 +430,7 @@ def test_get_campaigns_by_id():
 @api_test()
 def test_get_campaigns_by_id_with_includes():
     url = 'campaigns/{}'.format(MOCK_ID)
-    expected_url = api_url(url, includes=['mock']) 
+    expected_url = api_url(url, includes=['mock'])
     response = client.get_campaigns_by_id(
         MOCK_ID,
         includes=['mock']
@@ -443,7 +443,7 @@ def test_get_campaigns_by_id_with_includes():
 @api_test()
 def test_get_webhooks_by_id():
     url = 'webhooks/{}'.format(MOCK_ID)
-    expected_url = api_url(url) 
+    expected_url = api_url(url)
     response = client.get_webhooks_by_id(
         MOCK_ID,
     )
@@ -454,7 +454,7 @@ def test_get_webhooks_by_id():
 @api_test()
 def test_get_webhooks_by_id_with_includes():
     url = 'webhooks/{}'.format(MOCK_ID)
-    expected_url = api_url(url, includes=['mock']) 
+    expected_url = api_url(url, includes=['mock'])
     response = client.get_webhooks_by_id(
         MOCK_ID,
         includes=['mock']
@@ -467,7 +467,7 @@ def test_get_webhooks_by_id_with_includes():
 @api_test()
 def test_get_members_by_id():
     url = 'members/{}'.format(MOCK_ID)
-    expected_url = api_url(url) 
+    expected_url = api_url(url)
     response = client.get_members_by_id(
         MOCK_ID,
     )
@@ -478,7 +478,7 @@ def test_get_members_by_id():
 @api_test()
 def test_get_members_by_id_with_includes():
     url = 'members/{}'.format(MOCK_ID)
-    expected_url = api_url(url, includes=['mock']) 
+    expected_url = api_url(url, includes=['mock'])
     response = client.get_members_by_id(
         MOCK_ID,
         includes=['mock']
