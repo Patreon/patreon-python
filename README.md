@@ -49,12 +49,12 @@ def oauth_redirect():
     access_token = tokens['access_token']
 
     api_client = patreon.API(access_token)
-    user_response = api_client.fetch_user()
+    user_response = api_client.get_identity()
     user = user_response.data()
-    pledges = user.relationship('pledges')
-    pledge = pledges[0] if pledges and len(pledges) > 0 else None
+    memberships = user.relationship('memberships')
+    membership = memberships[0] if memberships and len(memberships) > 0 else None
 
-    # pass user and pledge to your view to render as needed
+    # pass user and membership to your view to render as needed
 ```
 
 You'll notice that the `user_response` does not return raw JSON data.
@@ -69,11 +69,14 @@ Some available methods are:
 
 Step 3. (Optional) Customize your usage
 ---
-`patreon.API` instances have four methods for interacting with the API:
-* `fetch_user(includes=None, fields=None)`
-* `fetch_campaign(includes=None, fields=None)`
-* `fetch_campaign_and_patrons(includes=None, fields=None)`
-* `fetch_page_of_pledges(campaign_id, page_size, cursor=None, includes=None, fields=None)`
+`patreon.API` instances have methods for interacting with the API based on the routes described in the docs.
+All methods include `includes` and `fields` parameters.
+
+ie:
+* `get_identity(includes=None, fields=None)`
+
+List methods take `page_size` and `cursor` methods as well, ie:
+* `get_campaigns(page_size, cursor=None, includes=None, fields=None)`
 
 The `includes` and `fields` arguments to these methods specify
 the [related resources](http://jsonapi.org/format/#fetching-includes)
@@ -84,8 +87,8 @@ For instance, if you wanted to request the total amount a patron has ever paid t
 which is not included by default, you could do:
 ```python
 api_client = patreon.API(patron_access_token)
-patron_response = api_client.fetch_user(None, {
-    'pledge': patreon.schemas.pledge.default_attributes + [patreon.schemas.pledge.Attributes.total_historical_amount_cents]
+patron_response = api_client.get_identity(None, {
+    'membership': patreon.schemas.member.Attributes.currently_entitled_amount_cents
 })
 ```
 
@@ -94,19 +97,19 @@ which you can use to extract [pagination links](http://jsonapi.org/format/#fetch
 from our [json:api response documents](http://jsonapi.org):
 ```python
 api_client = patreon.API(creator_access_token)
-campaign_id = api_client.fetch_campaign().data()[0].id()
-pledges = []
+campaign_id = api_client.get_campaigns().data()[0].id()
+memberships = []
 cursor = None
 while True:
-    pledges_response = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=cursor)
-    pledges += pledges_response.data()
-    cursor = api_client.extract_cursor(pledges_response)
+    members_response = api_client.get_campaigns_by_id_members(campaign_id, 10, cursor=cursor)
+    members += members_response.data()
+    cursor = api_client.extract_cursor(members_response)
     if not cursor:
         break
-names_and_pledges = [{
-    'full_name': pledge.relationship('patron').attribute('full_name'),
-    'amount_cents': pledge.attribute('amount_cents'),
-} for pledge in pledges]
+names_and_membershipss = [{
+    'full_name': member.relationship('user').attribute('full_name'),
+    'amount_cents': member.attribute('amount_cents'),
+} for member in members]
 ```
 
 

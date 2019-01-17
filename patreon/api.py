@@ -1,9 +1,12 @@
+# api.py
+# This file is auto-generated from the same code that generates
+# https://docs.patreon.com. Community pull requests against this
+# file may not be accepted.
 import requests
 import six
 
 from patreon.jsonapi.parser import JSONAPIParser
 from patreon.jsonapi.url_util import build_url
-from patreon.schemas import campaign
 from patreon.utils import user_agent_string
 from patreon.version_compatibility.utc_timezone import utc_timezone
 from six.moves.urllib.parse import urlparse, parse_qs, urlencode
@@ -14,29 +17,8 @@ class API(object):
         super(API, self).__init__()
         self.access_token = access_token
 
-    def fetch_user(self, includes=None, fields=None):
-        return self.__get_jsonapi_doc(
-            build_url('current_user', includes=includes, fields=fields)
-        )
-
-    def fetch_campaign_and_patrons(self, includes=None, fields=None):
-        if not includes:
-            includes = campaign.default_relationships \
-                + [campaign.Relationships.pledges]
-        return self.fetch_campaign(includes=includes, fields=fields)
-
-    def fetch_campaign(self, includes=None, fields=None):
-        return self.__get_jsonapi_doc(
-            build_url(
-                'current_user/campaigns', includes=includes, fields=fields
-            )
-        )
-
-    def fetch_page_of_pledges(
-            self, campaign_id, page_size, cursor=None, includes=None,
-            fields=None
-    ):
-        url = 'campaigns/{0}/pledges'.format(campaign_id)
+    def get_campaigns(self, page_size, cursor=None,  includes=None, fields=None):
+        url = 'campaigns'
         params = {'page[count]': page_size}
         if cursor:
             try:
@@ -45,6 +27,52 @@ class API(object):
                 pass
             params.update({'page[cursor]': cursor})
         url += "?" + urlencode(params)
+        return self.__get_jsonapi_doc(
+            build_url(url, includes=includes, fields=fields)
+        )
+    def get_identity(self, includes=None, fields=None):
+        url = 'identity'
+        return self.__get_jsonapi_doc(
+            build_url(url, includes=includes, fields=fields)
+        )
+    def get_webhooks(self, page_size, cursor=None,  includes=None, fields=None):
+        url = 'webhooks'
+        params = {'page[count]': page_size}
+        if cursor:
+            try:
+                cursor = self.__as_utc(cursor).isoformat()
+            except AttributeError:
+                pass
+            params.update({'page[cursor]': cursor})
+        url += "?" + urlencode(params)
+        return self.__get_jsonapi_doc(
+            build_url(url, includes=includes, fields=fields)
+        )
+    def get_campaigns_by_id_members(self, resource_id, page_size, cursor=None,  includes=None, fields=None):
+        url = 'campaigns/{}/members'.format(resource_id)
+        params = {'page[count]': page_size}
+        if cursor:
+            try:
+                cursor = self.__as_utc(cursor).isoformat()
+            except AttributeError:
+                pass
+            params.update({'page[cursor]': cursor})
+        url += "?" + urlencode(params)
+        return self.__get_jsonapi_doc(
+            build_url(url, includes=includes, fields=fields)
+        )
+    def get_campaigns_by_id(self, resource_id, includes=None, fields=None):
+        url = 'campaigns/{}'.format(resource_id)
+        return self.__get_jsonapi_doc(
+            build_url(url, includes=includes, fields=fields)
+        )
+    def get_webhooks_by_id(self, resource_id, includes=None, fields=None):
+        url = 'webhooks/{}'.format(resource_id)
+        return self.__get_jsonapi_doc(
+            build_url(url, includes=includes, fields=fields)
+        )
+    def get_members_by_id(self, resource_id, includes=None, fields=None):
+        url = 'members/{}'.format(resource_id)
         return self.__get_jsonapi_doc(
             build_url(url, includes=includes, fields=fields)
         )
@@ -92,7 +120,7 @@ class API(object):
 
     def __get_json(self, suffix):
         response = requests.get(
-            "https://www.patreon.com/api/oauth2/api/{}".format(suffix),
+            "https://www.patreon.com/api/oauth2/v2/{}".format(suffix),
             headers={
                 'Authorization': "Bearer {}".format(self.access_token),
                 'User-Agent': user_agent_string(),

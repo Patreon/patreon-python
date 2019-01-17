@@ -1,47 +1,37 @@
-# user_spec.py
+# deliverable_spec.py
 # This file is auto-generated from the same code that generates
 # https://docs.patreon.com. Community pull requests against this
 # file may not be accepted.
 import pytest
 
-from patreon.schemas import user
+from patreon.schemas import deliverable
 
 
 @pytest.fixture
 def attributes():
     return [
-        'email',
-        'first_name',
-        'last_name',
-        'full_name',
-        'is_email_verified',
-        'vanity',
-        'about',
-        'image_url',
-        'thumb_url',
-        'can_see_nsfw',
-        'created',
-        'url',
-        'like_count',
-        'hide_pledges',
-        'social_connections',
+        'completed_at',
+        'delivery_status',
+        'due_at',
     ]
 
 
 @pytest.fixture
 def relationships():
     return [
-        'memberships',
         'campaign',
+        'benefit',
+        'member',
+        'user',
     ]
 
 
 def test_schema_attributes_are_properly_formatted(attributes):
     for attribute_name in attributes:
-        value = getattr(user.Attributes, attribute_name, None)
+        value = getattr(deliverable.Attributes, attribute_name, None)
         assert value is not None and value is attribute_name
 
 def test_schema_relationships_are_properly_formatted(relationships):
     for relationship_name in relationships:
-        value = getattr(user.Relationships, relationship_name, None)
+        value = getattr(deliverable.Relationships, relationship_name, None)
         assert value is not None and value is relationship_name
