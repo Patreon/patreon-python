@@ -6,7 +6,7 @@ class Attributes(object):
     pledge_cap_cents = 'pledge_cap_cents'
     patron_pays_fees = 'patron_pays_fees'
     unread_count = 'unread_count'
-    is_paused = = 'is_paused'
+    is_paused = 'is_paused'
 
 
 class Relationships(object):
