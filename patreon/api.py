@@ -9,9 +9,10 @@ from patreon.version_compatibility.urllib_parse import urlencode, urlparse, pars
 
 
 class API(object):
-    def __init__(self, access_token):
+    def __init__(self, access_token, proxies):
         super(API, self).__init__()
         self.access_token = access_token
+        self.proxies = proxies
 
     def fetch_user(self, includes=None, fields=None):
         return self.__get_jsonapi_doc(
@@ -95,7 +96,8 @@ class API(object):
             headers={
                 'Authorization': "Bearer {}".format(self.access_token),
                 'User-Agent': user_agent_string(),
-            }
+            },
+            proxies=self.proxies
         )
         return response.json()
 

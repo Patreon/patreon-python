@@ -4,10 +4,11 @@ from patreon.utils import user_agent_string
 
 
 class OAuth(object):
-    def __init__(self, client_id, client_secret):
+    def __init__(self, client_id, client_secret, proxies):
         super(OAuth, self).__init__()
         self.client_id = client_id
         self.client_secret = client_secret
+        self.proxies = proxies
 
     def get_tokens(self, code, redirect_uri):
         return self.__update_token({
@@ -26,13 +27,13 @@ class OAuth(object):
             "client_secret": self.client_secret
         })
 
-    @staticmethod
-    def __update_token(params):
+    def __update_token(self, params):
         response = requests.post(
             "https://www.patreon.com/api/oauth2/token",
             params=params,
             headers={
                 'User-Agent': user_agent_string(),
-            }
+            },
+            proxies=self.proxies
         )
         return response.json()
