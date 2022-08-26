@@ -8,3 +8,5 @@
 * Make currently-unused parameter optional
 * Improve flask example
 * Thanks to: @21echoes, @tanabi, @phildini
+
+* Add proxy support
