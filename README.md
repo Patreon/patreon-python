@@ -106,7 +106,7 @@ while True:
     cursor = api_client.extract_cursor(members_response)
     if not cursor:
         break
-names_and_membershipss = [{
+names_and_memberships = [{
     'full_name': member.relationship('user').attribute('full_name'),
     'amount_cents': member.attribute('amount_cents'),
 } for member in members]
