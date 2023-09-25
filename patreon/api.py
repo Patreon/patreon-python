@@ -97,6 +97,10 @@ class API(object):
         # Path was valid until leaf, at which point nothing was found
         if current_dict is None or (head is not None and tail is None):
             return None
+
+        elif type(current_dict) == dict and head not in current_dict:
+            return None
+
         # Path stopped before leaf was reached
         elif current_dict and type(current_dict) != six.text_type:
             raise Exception(
