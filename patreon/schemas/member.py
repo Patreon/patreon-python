@@ -9,11 +9,13 @@ class Attributes(object):
     full_name = 'full_name'
     email = 'email'
     pledge_relationship_start = 'pledge_relationship_start'
+    pledge_cadence = 'pledge_cadence'
     lifetime_support_cents = 'lifetime_support_cents'
     currently_entitled_amount_cents = 'currently_entitled_amount_cents'
     last_charge_date = 'last_charge_date'
     last_charge_status = 'last_charge_status'
     note = 'note'
+    next_charge_date = 'next_charge_date'
     will_pay_amount_cents = 'will_pay_amount_cents'
 
 
